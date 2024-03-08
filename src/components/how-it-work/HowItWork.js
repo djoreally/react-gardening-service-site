@@ -22,7 +22,7 @@ const HowItWork = () => {
                             <div className="section-title text-center mb-70">
                                 <span>See How it Works!</span>
                                 <h2>How we works
-                                    <br /> Landscape Gardening</h2>
+                                    <br /> Licensing Progam</h2>
                             </div>
                         </div>
                     </div>

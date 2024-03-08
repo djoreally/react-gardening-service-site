@@ -9,7 +9,7 @@ import Icon_Irreigation from '../../assets/images/why-choose-us/irreigation.png'
 const WhyChooseUsData = [
     {
         id: uuidv4(),
-        heading: 'Free Estimates',
+        heading: 'Proven Business Model',
         description: 'There are many variations of passages the majority have suffered alteration form',
         img: Icon_Estimates,
     },
@@ -21,13 +21,13 @@ const WhyChooseUsData = [
     },
     {
         id: uuidv4(),
-        heading: 'Quality Work',
+        heading: 'Training and Support',
         description: 'There are many variations of passages the majority have suffered alteration form',
         img: Icon_Work,
     },
     {
         id: uuidv4(),
-        heading: 'Watering & Irrigation',
+        heading: 'Be Your Own Boss',
         description: 'There are many variations of passages the majority have suffered alteration form',
         img: Icon_Irreigation,
     },

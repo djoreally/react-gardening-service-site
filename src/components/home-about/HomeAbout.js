@@ -19,9 +19,8 @@ const HomeAbout = () => {
                             <div className="about-text-wrapper pt-30">
                                 <div className="section-title mb-40">
                                     <span>We are Committed to Landscape Service</span>
-                                    <h2 className="mb-30">20 years we resarch or how to growth Garden & Landscap Systems</h2>
-                                    <p>All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet.
-                                        <br /><br /> Combined with a handful of model sentence structures, Lorem Ipsum The generated Lorem Ipsum is therefore always free from repetition, injected humour, </p>
+                                    <h2 className="mb-30">Are you a driven entrepreneur looking for a business opportunity in the automotive industry? </h2>
+                                    <p>The MOMS Mobile Oil Change Licensing Program offers a unique chance to be your own boss and provide a valuable service – convenient oil changes delivered right to customers' doorsteps.                                        <br /><br /> Explore the MOMS Mobile Oil Change Licensing Program and discover how you can turn your entrepreneurial dream into a reality.  Contact us today to learn more about franchise opportunities in your area! </p>
                                 </div>
                                 <a href="/contact" className="l-btn">Appointment</a>
                             </div>

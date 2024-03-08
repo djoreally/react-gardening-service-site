@@ -15,8 +15,8 @@ const Feature = () => {
                                 <div className="single-feature-icon">
                                     <img src={Feature1} alt="" />
                                 </div>
-                                <h5>Satisfaction Guarantee</h5>
-                                <p>There are many variations of passages majority have suffered alteration in some form, by</p>
+                                <h5>Proven Business Model</h5>
+                                <p>Benefit from a well-established brand and a proven system for success.</p>
                             </div>
                         </div>
                         <div className="col-xl-3 col-lg-3 col-md-6">
@@ -24,8 +24,8 @@ const Feature = () => {
                                 <div className="single-feature-icon">
                                     <img src={Feature2} alt="" />
                                 </div>
-                                <h5>Professional Team</h5>
-                                <p>There are many variations of passages majority have suffered alteration in some form, by</p>
+                                <h5>Be Your Own Boss/h5>
+                                <p>TSet your own hours and build a business you can be proud of.</p>
                             </div>
                         </div>
                         <div className="col-xl-3 col-lg-3 col-md-6">
@@ -33,8 +33,8 @@ const Feature = () => {
                                 <div className="single-feature-icon">
                                     <img src={Feature3} alt="" />
                                 </div>
-                                <h5>Material Instrument</h5>
-                                <p>There are many variations of passages majority have suffered alteration in some form, by</p>
+                                <h5>Low Overhead</h5>
+                                <p>Eliminate the high costs associated with brick-and-mortar locations.</p>
                             </div>
                         </div>
                         <div className="col-xl-3 col-lg-3 col-md-6">
@@ -42,8 +42,8 @@ const Feature = () => {
                                 <div className="single-feature-icon">
                                     <img src={Feature4} alt="" />
                                 </div>
-                                <h5>20 Years Experience</h5>
-                                <p>There are many variations of passages majority have suffered alteration in some form, by</p>
+                                <h5>Training and Support</h5>
+                                <p>Receive comprehensive training and ongoing support from the MOMS team.</p>
                             </div>
                         </div>
                     </div>
