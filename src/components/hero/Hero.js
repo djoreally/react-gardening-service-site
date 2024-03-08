@@ -15,8 +15,8 @@ const Hero = () => {
                     <div className="row">
                         <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                             <div className="hero-wrapper">
-                                <h1>Welcome to Our Champion Landscape & gardening.</h1>
-                                <p>We are certified company. We provide best Landscaping & Gardening services for you your company .</p>
+                                <h1>Welcome to MOMS Mobile Oil Change Licensing.</h1>
+                                <p>Partner with us and bring the convenience of mobile oil changes to your community. Our proven business model empowers entrepreneurs to deliver top-quality service directly to customers' doorsteps. Join the MOMS Mobile Oil Change family and revolutionize the automotive service industry in your area! .</p>
                                 <Link to="/projects" className="l-btn">Our Solution</Link>
                             </div>
                         </div>
