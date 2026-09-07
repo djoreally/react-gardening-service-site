@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "name": "react-gardening-service-site",
+  "purpose": "Legacy React demo used as an external BuildOS clean-room certification target.",
+  "audience": [],
+  "coreObjects": [],
+  "primaryJourney": null
+}

@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "web": "React / Create React App",
+  "core": null,
+  "database": null,
+  "auth": null,
+  "state": {"location": ".buildos"},
+  "git": {"hooksPath": ".githooks"},
+  "ci": {"provider": "Vercel build boundary"},
+  "deployment": "Vercel",
+  "packageManager": "npm",
+  "aiAgents": []
+}

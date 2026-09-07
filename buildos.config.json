@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "stateDirectory": ".buildos",
+  "agentContract": "AGENTS.md",
+  "specification": "BUILDOS.md",
+  "commands": {
+    "test": "npm run test",
+    "build": "npm run build:app"
+  },
+  "check": ["state", "test"],
+  "verify": ["state", "test", "build"],
+  "missingChecks": ["typecheck", "lint"],
+  "requireChangeRecord": true,
+  "release": {"requireCleanTree": true, "requireExactSha": true}
+}

@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "id": "2026-09-07-buildos-clean-room-baseline",
+  "status": "built",
+  "summary": "Install BuildOS into a legacy Vercel-linked React repository using only web/GitHub access.",
+  "affectedContracts": ["build boundary", "tests", "remote AI repair loop"],
+  "productionVerification": "pending"
+}

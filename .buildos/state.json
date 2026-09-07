@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "status": "in_progress",
+  "currentMilestone": "web-ai-clean-room",
+  "lastCertifiedSha": null,
+  "productionSha": null,
+  "openGates": [
+    "No typecheck script is exposed by this legacy repo.",
+    "No standalone lint script is exposed by this legacy repo.",
+    "Baseline BuildOS verification must pass on Vercel before the deliberate RED test."
+  ],
+  "knownRisks": [
+    "BuildOS is invoked from immutable GitHub SHA 981c225e72f9e8df6cb46a2fc535fe4c96e64591 because npm publication is not complete."
+  ]
+}
