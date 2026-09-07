@@ -24,7 +24,7 @@ const Feature = () => {
                                 <div className="single-feature-icon">
                                     <img src={Feature2} alt="" />
                                 </div>
-                                <h5>Be Your Own Boss/h5>
+                                <h5>Be Your Own Boss</h5>
                                 <p>TSet your own hours and build a business you can be proud of.</p>
                             </div>
                         </div>
