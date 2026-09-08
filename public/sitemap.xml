@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://oilchangedemo.vercel.app/</loc></url>
+  <url><loc>https://oilchangedemo.vercel.app/about</loc></url>
+  <url><loc>https://oilchangedemo.vercel.app/services</loc></url>
+  <url><loc>https://oilchangedemo.vercel.app/service-details</loc></url>
+  <url><loc>https://oilchangedemo.vercel.app/projects</loc></url>
+  <url><loc>https://oilchangedemo.vercel.app/project-details</loc></url>
+  <url><loc>https://oilchangedemo.vercel.app/blogs</loc></url>
+  <url><loc>https://oilchangedemo.vercel.app/blog-details</loc></url>
+  <url><loc>https://oilchangedemo.vercel.app/faq</loc></url>
+  <url><loc>https://oilchangedemo.vercel.app/contact</loc></url>
+</urlset>
