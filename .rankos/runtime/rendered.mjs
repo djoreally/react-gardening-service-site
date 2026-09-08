@@ -30,11 +30,7 @@ export async function certifyRendered({ dir = process.cwd(), baseUrl, canonicalO
   chromium.setGraphicsMode = false;
   const target = path.resolve(dir, reportPath);
   const report = JSON.parse(await fs.readFile(target, 'utf8'));
-  const browser = await puppeteer.launch({
-    args: chromium.args,
-    executablePath: await chromium.executablePath(),
-    headless: true,
-  });
+  const browser = await puppeteer.launch({ args: chromium.args, executablePath: await chromium.executablePath(), headless: true });
   const renderedRoutes = [];
   const skippedRoutes = [];
   try {
@@ -45,8 +41,16 @@ export async function certifyRendered({ dir = process.cwd(), baseUrl, canonicalO
       const requestedUrl = new URL(normalize(route), String(baseUrl).replace(/\/$/, '') + '/').toString();
       let response;
       try {
-        response = await page.goto(requestedUrl, { waitUntil: 'networkidle0', timeout: 30000 });
-        await new Promise(resolve => setTimeout(resolve, 250));
+        response = await page.goto(requestedUrl, { waitUntil: 'domcontentloaded', timeout: 20000 });
+        try {
+          await page.waitForFunction(() => {
+            const title = document.title.trim();
+            const description = document.querySelector('meta[name="description"]')?.getAttribute('content')?.trim();
+            const canonical = document.querySelector('link[rel="canonical"]')?.getAttribute('href')?.trim();
+            return Boolean(title && description && canonical && document.body?.innerText?.trim());
+          }, { timeout: 5000 });
+        } catch {}
+        await new Promise(resolve => setTimeout(resolve, 200));
         const observed = await page.evaluate(() => ({
           title: document.title.trim(),
           description: document.querySelector('meta[name="description"]')?.getAttribute('content')?.trim() || '',
@@ -56,8 +60,10 @@ export async function certifyRendered({ dir = process.cwd(), baseUrl, canonicalO
           jsonLdCount: document.querySelectorAll('script[type="application/ld+json"]').length,
         }));
         renderedRoutes.push({ route, requestedUrl, finalUrl: page.url(), status: response?.status() ?? null, ...observed });
+        console.log(`Rendered ${route}: ${response?.status() ?? 'n/a'} · ${observed.title || '(no title)'}`);
       } catch (error) {
         renderedRoutes.push({ route, requestedUrl, finalUrl: page.url(), status: response?.status() ?? null, error: String(error?.message || error) });
+        console.log(`Rendered ${route}: ERROR · ${String(error?.message || error)}`);
       } finally { await page.close(); }
     }
   } finally { await browser.close(); }
