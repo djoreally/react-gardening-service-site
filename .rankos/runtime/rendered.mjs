@@ -1,5 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import puppeteer from 'puppeteer-core';
+import chromium from '@sparticuz/chromium';
 
 const CATEGORIES = ['on-page', 'indexability', 'rendered-seo', 'entity-schema-integrity', 'media-provenance-guard', 'local-corridor-verification'];
 const makeFinding = (id, category, message, severity = 'warning', evidence = null) => ({ id, category, message, severity, file: null, evidence });
@@ -25,10 +27,14 @@ function recalculate(report) {
 
 export async function certifyRendered({ dir = process.cwd(), baseUrl, canonicalOrigin = baseUrl, reportPath = '.rankos/report.json' }) {
   if (!baseUrl) throw new Error('rankos render requires --url <deployment-url>');
-  const { chromium } = await import('playwright');
+  chromium.setGraphicsMode = false;
   const target = path.resolve(dir, reportPath);
   const report = JSON.parse(await fs.readFile(target, 'utf8'));
-  const browser = await chromium.launch({ headless: true });
+  const browser = await puppeteer.launch({
+    args: chromium.args,
+    executablePath: await chromium.executablePath(),
+    headless: true,
+  });
   const renderedRoutes = [];
   const skippedRoutes = [];
   try {
@@ -39,8 +45,8 @@ export async function certifyRendered({ dir = process.cwd(), baseUrl, canonicalO
       const requestedUrl = new URL(normalize(route), String(baseUrl).replace(/\/$/, '') + '/').toString();
       let response;
       try {
-        response = await page.goto(requestedUrl, { waitUntil: 'networkidle', timeout: 30000 });
-        await page.waitForTimeout(250);
+        response = await page.goto(requestedUrl, { waitUntil: 'networkidle0', timeout: 30000 });
+        await new Promise(resolve => setTimeout(resolve, 250));
         const observed = await page.evaluate(() => ({
           title: document.title.trim(),
           description: document.querySelector('meta[name="description"]')?.getAttribute('content')?.trim() || '',
