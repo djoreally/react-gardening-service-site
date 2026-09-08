@@ -1,5 +1,5 @@
 # Copilot Instructions
 
-- Always run the full test suite before deployment.
+- Do not publish or ship a release until the verification suite has completed successfully.
+- Any failed quality gate must stop the release; never publish around the blocker.
 - Never use npm for package-manager operations.
-- Never bypass a failing BuildOS gate.
