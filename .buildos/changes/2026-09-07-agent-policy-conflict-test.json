@@ -1,0 +1,6 @@
+{
+  "version": 1,
+  "change": "agent-policy-conflict-test",
+  "intent": "Adversarially verify BuildOS detects and resolves contradictory AI-agent instructions before deployment.",
+  "expected": "BuildOS should detect the Claude/Copilot conflict, preserve provenance, keep BuildOS canonical policy authoritative, and refuse silent ambiguity."
+}
