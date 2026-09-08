@@ -44,5 +44,4 @@
 
 <p>Client side Hosting - Vercel</p>
 
-
-
+<!-- BuildOS scope applicability probe: documentation-only candidate. -->
