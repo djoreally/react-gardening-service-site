@@ -1,0 +1,19 @@
+import { createHash } from 'node:crypto';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+
+const SOURCES=[['AGENTS.md','buildos'],['CLAUDE.md','claude'],['GEMINI.md','gemini'],['.cursorrules','cursor'],['.windsurfrules','windsurf'],['.github/copilot-instructions.md','github-copilot']];
+const readJson=path=>JSON.parse(readFileSync(path,'utf8'));
+const sha256=text=>createHash('sha256').update(text).digest('hex');
+const extractRules=content=>content.split(/\r?\n/).map(x=>x.trim()).filter(x=>x&&(/^(?:[-*]|\d+\.)\s+/.test(x)||/\b(must|never|always|do not|don't|required|before|after|bypass|deploy|test)\b/i.test(x))).slice(0,200);
+const denied=text=>/\b(never|do not|don't|must not|should not|skip)\b/i.test(text);
+const classify=instruction=>{const text=instruction.toLowerCase();if(/\b(test|tests|test suite)\b/.test(text)&&/\bbefore\b/.test(text)&&/\bdeploy(?:ment|ing)?\b/.test(text))return{topic:'tests-before-deploy',polarity:denied(text)?'deny':'require'};if(/\bbypass\b/.test(text)&&/\bgate\b/.test(text))return{topic:'bypass-gate',polarity:denied(text)?'deny':'allow'};if(/\buse\b/.test(text)&&/\bnpm\b/.test(text))return{topic:'use-npm',polarity:denied(text)?'deny':'require'};return null};
+
+export function validateAgentPolicy(cwd){
+  const sources=SOURCES.filter(([path])=>existsSync(join(cwd,path))).map(([path,agent])=>{const content=readFileSync(join(cwd,path),'utf8');return{agent,path,format:path.endsWith('.md')?'markdown':'text',contentHash:sha256(content),rules:extractRules(content)}});
+  const canonical=new Map();const cfg=readJson(join(cwd,'buildos.config.json'));const verify=cfg.verify||[];if(verify.includes('test')&&(!verify.includes('build')||verify.indexOf('test')<verify.indexOf('build')))canonical.set('tests-before-deploy','require');
+  const buildos=sources.find(s=>s.agent==='buildos');for(const instruction of buildos?.rules||[]){const semantic=classify(instruction);if(semantic)canonical.set(semantic.topic,semantic.polarity)}
+  const rules=sources.flatMap(source=>source.rules.map((instruction,index)=>{const semantic=classify(instruction);return{id:`${source.agent}:${source.path}:${index+1}`,sourceAgent:source.agent,sourcePath:source.path,instruction,scope:'repository',enforcementLevel:source.agent==='buildos'?'canonical':'imported',topic:semantic?.topic||null,polarity:semantic?.polarity||null,conflicts:[],resolution:null,provenance:{sourcePath:source.path,contentHash:source.contentHash}}}));
+  const conflicts=[];for(let i=0;i<rules.length;i++)for(let j=i+1;j<rules.length;j++){const a=rules[i],b=rules[j];if(!a.topic||a.topic!==b.topic||!a.polarity||a.polarity===b.polarity)continue;const canonicalPolarity=canonical.get(a.topic)||null,resolved=Boolean(canonicalPolarity),winner=resolved?(a.polarity===canonicalPolarity?a:b):null,loser=resolved?(winner===a?b:a):null;const c={id:`conflict-${conflicts.length+1}`,topic:a.topic,ruleIds:[a.id,b.id],canonicalPolarity,resolved,resolution:resolved?'buildos-canonical-policy':null,winnerRuleId:winner?.id||null,overriddenRuleId:loser?.id||null};conflicts.push(c);a.conflicts.push(c.id);b.conflicts.push(c.id);if(resolved){winner.resolution='canonical';loser.resolution='overridden-by-buildos'}}
+  const policy={version:2,generatedAt:new Date().toISOString(),canonicalSource:'BuildOS',sources,canonicalPolicy:Object.fromEntries(canonical),normalizedRules:rules,conflicts,unresolvedConflicts:conflicts.filter(c=>!c.resolved)};const path=join(cwd,'.buildos/agent-policy.json');mkdirSync(dirname(path),{recursive:true});writeFileSync(path,JSON.stringify(policy,null,2)+'\n');if(policy.unresolvedConflicts.length)throw new Error(`Unresolved AI-agent policy conflicts: ${policy.unresolvedConflicts.map(c=>c.topic).join(', ')}`);return policy;
+}
