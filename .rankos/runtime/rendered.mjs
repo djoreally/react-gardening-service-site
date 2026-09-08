@@ -12,6 +12,13 @@ const canonicalFor = (origin, route) => {
   return pathname === '/' ? `${base}/` : `${base}${pathname}`;
 };
 
+function buildAuditUrl(baseUrl, route) {
+  const base = new URL(baseUrl);
+  const target = new URL(normalize(route), `${base.origin}/`);
+  for (const [key, value] of base.searchParams) target.searchParams.set(key, value);
+  return target.toString();
+}
+
 function recalculate(report) {
   const blockers = report.findings.filter(item => item.severity === 'blocker').length;
   const warnings = report.findings.filter(item => item.severity === 'warning').length;
@@ -38,7 +45,7 @@ export async function certifyRendered({ dir = process.cwd(), baseUrl, canonicalO
       const route = routeInfo.route || '/';
       if (route.includes(':param')) { skippedRoutes.push({ route, reason: 'dynamic route needs fixture' }); continue; }
       const page = await browser.newPage();
-      const requestedUrl = new URL(normalize(route), String(baseUrl).replace(/\/$/, '') + '/').toString();
+      const requestedUrl = buildAuditUrl(baseUrl, route);
       let response;
       try {
         response = await page.goto(requestedUrl, { waitUntil: 'domcontentloaded', timeout: 20000 });
@@ -59,7 +66,10 @@ export async function certifyRendered({ dir = process.cwd(), baseUrl, canonicalO
           textLength: (document.body?.innerText || '').trim().length,
           jsonLdCount: document.querySelectorAll('script[type="application/ld+json"]').length,
         }));
-        renderedRoutes.push({ route, requestedUrl, finalUrl: page.url(), status: response?.status() ?? null, ...observed });
+        const finalUrl = page.url();
+        const landedOnAuth = /vercel\.com\/(?:login|sso|oauth)/i.test(finalUrl) || /Sign in to Vercel/i.test(await page.title());
+        if (landedOnAuth) throw new Error(`Certification target redirected to Vercel authentication: ${finalUrl}`);
+        renderedRoutes.push({ route, requestedUrl, finalUrl, status: response?.status() ?? null, ...observed });
         console.log(`Rendered ${route}: ${response?.status() ?? 'n/a'} · ${observed.title || '(no title)'}`);
       } catch (error) {
         renderedRoutes.push({ route, requestedUrl, finalUrl: page.url(), status: response?.status() ?? null, error: String(error?.message || error) });
@@ -100,7 +110,7 @@ export async function certifyRendered({ dir = process.cwd(), baseUrl, canonicalO
     return !item.id.startsWith('rendered-');
   });
   report.findings.push(...findings);
-  report.evidence = { ...(report.evidence || {}), rendered: true, renderedAt: new Date().toISOString(), renderedBaseUrl: baseUrl, canonicalOrigin, renderedRoutes, skippedRoutes };
+  report.evidence = { ...(report.evidence || {}), rendered: true, renderedAt: new Date().toISOString(), renderedBaseUrl: new URL(baseUrl).origin, canonicalOrigin, renderedRoutes, skippedRoutes };
   recalculate(report);
   await fs.writeFile(target, JSON.stringify(report, null, 2) + '\n');
   return { report, output: target };
