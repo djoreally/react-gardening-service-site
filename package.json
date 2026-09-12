@@ -2,7 +2,9 @@
   "name": "react-gardening-service-site",
   "version": "0.1.0",
   "private": true,
-  "engines": {"node": ">=24 <25"},
+  "engines": {
+    "node": ">=24 <25"
+  },
   "dependencies": {
     "@sparticuz/chromium": "149.0.0",
     "@testing-library/jest-dom": "^5.16.5",
@@ -26,16 +28,29 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "node .buildos/runtime/buildos.mjs verify || (cat .buildos/repair/latest.json 2>/dev/null || true; exit 1); node .rankos/runtime/rankos.mjs verify; node .rankos/runtime/rankos.mjs render --url https://oilchangedemo.vercel.app --canonical-origin https://oilchangedemo.vercel.app",
+    "build": "node .buildos/runtime/buildos.mjs verify || (cat .buildos/repair/latest.json 2>/dev/null || true; exit 1); node .rankos/runtime/rankos.mjs verify; react-scripts build",
     "build:app": "react-scripts build",
     "rankos:audit": "node .rankos/runtime/rankos.mjs verify",
     "rankos:render": "node .rankos/runtime/rankos.mjs render --url https://oilchangedemo.vercel.app --canonical-origin https://oilchangedemo.vercel.app",
     "test": "react-scripts test --watchAll=false",
     "eject": "react-scripts eject"
   },
-  "eslintConfig": {"extends": ["react-app", "react-app/jest"]},
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
   "browserslist": {
-    "production": [">0.2%", "not dead", "not op_mini all"],
-    "development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
