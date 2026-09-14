@@ -1,0 +1,22 @@
+name: BuildOS Runtime Validation
+
+on:
+  push:
+    branches:
+      - "buildos-*"
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: BuildOS verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm ci
+      - run: node .buildos/runtime/buildos.mjs verify
